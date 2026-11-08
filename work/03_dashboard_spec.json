@@ -1,0 +1,1172 @@
+{
+ "title": "FB Ads: chi phí mỗi tin nhắn",
+ "subtitle": "Báo cáo quảng cáo Facebook theo ngày, cập nhật mỗi khi thêm file vào 00_Raw.",
+ "as_of_label": "Dữ liệu tới 20/10/2026",
+ "scope_all": "Toàn bộ quảng cáo",
+ "default_cube": "ads",
+ "lang_allow": [
+  "Embrace",
+  "of",
+  "Tana",
+  "Daily",
+  "Flower",
+  "Dreamy",
+  "Breezy",
+  "Mokar",
+  "HTM",
+  "HEAD",
+  "Messages",
+  "Engagement",
+  "Reach",
+  "ad",
+  "set",
+  "campaign",
+  "link",
+  "click",
+  "test"
+ ],
+ "filters": [
+  {
+   "dim": "date",
+   "type": "date_range",
+   "label": "Ngày",
+   "default": {
+    "from": "2026-10-14",
+    "to": "2026-10-20"
+   },
+   "presets": [
+    {
+     "label": "7 ngày trọn gần nhất",
+     "from": "2026-10-14",
+     "to": "2026-10-20"
+    },
+    {
+     "label": "14 ngày gần nhất",
+     "from": "2026-10-07",
+     "to": "2026-10-20"
+    },
+    {
+     "label": "Tháng 10/2026 (tới nay)",
+     "from": "2026-10-01",
+     "to": "2026-10-20"
+    }
+   ],
+   "why": "Xem hằng ngày: so 7 ngày gần nhất với 7 ngày liền trước để thấy chi phí mỗi tin nhắn đang tốt lên hay xấu đi."
+  },
+  {
+   "dim": "unit",
+   "why": "Ngân sách được chia theo đơn vị chạy (HEAD, Q2, Q7, BR); mỗi đơn vị tự quyết dồn hay cắt phần của mình."
+  },
+  {
+   "dim": "product",
+   "why": "Dồn hay cắt ngân sách thường theo dòng sản phẩm hoa."
+  },
+  {
+   "dim": "campaign",
+   "why": "Người chạy ads xử lý ad set theo từng campaign; mục tiêu campaign vẫn xem được ở biểu đồ tỷ trọng trang Phân bổ ngân sách."
+  }
+ ],
+ "prd": {
+  "product_name": "Dashboard FB Ads: chi phí mỗi tin nhắn",
+  "summary": "Dashboard giúp chủ shop và người chạy quảng cáo thấy mỗi sáng tiền quảng cáo Facebook đang đổ vào đâu và mỗi tin nhắn tốn bao nhiêu, để dồn ngân sách sang campaign, ad set ra tin nhắn rẻ và cắt chỗ đắt.",
+  "audience": "Chủ shop (trang Tổng quan) và người chạy quảng cáo (các trang chi tiết)",
+  "usage": "Xem hằng ngày sau khi thả file báo cáo mới vào 00_Raw, khoảng 5 đến 10 phút, trên máy tính.",
+  "dashboard_type": "Dashboard chiến thuật (tactical): theo dõi hằng ngày và phân tích đa chiều, có bộ lọc để đi sâu",
+  "problem_type": "Bài toán tối ưu: giảm chi phí mỗi tin nhắn mà không làm giảm số tin nhắn",
+  "decisions": [
+   "Dồn thêm ngân sách cho campaign, dòng sản phẩm, ad set nào",
+   "Giảm hoặc tắt ad set nào đang tốn tiền mà ra ít tin nhắn",
+   "Chi phí mỗi tin nhắn tăng là do giá hiển thị đắt lên hay do quảng cáo kém hút tin nhắn, để biết nên đổi đối tượng hay đổi nội dung"
+  ],
+  "questions": [
+   "Mỗi tin nhắn đang tốn bao nhiêu, rẻ hay đắt hơn mức trung bình, tốt lên hay xấu đi so với kỳ trước?",
+   "Khách rơi rụng ở bước nào: thu hút (CTR) hay thuyết phục nhắn tin?",
+   "Tiền đang đổ vào campaign, dòng sản phẩm, đơn vị nào, chỗ nào ra tin nhắn rẻ, chỗ nào đắt?",
+   "Ad set nào tiêu nhiều mà chi phí mỗi tin nhắn cao, cần tắt hoặc giảm?",
+   "Chi phí tăng do CPM hay do sức hút tin nhắn?"
+  ],
+  "north_star": "cost_per_msg",
+  "key_metrics": [
+   {
+    "measure": "cost_per_msg",
+    "meaning": "Bình quân mỗi cuộc trò chuyện từ quảng cáo tốn bao nhiêu tiền; thấp là tốt.",
+    "formula": "Tổng chi tiêu chia tổng tin nhắn, mọi mục tiêu campaign, trong khoảng ngày và bộ lọc đang chọn"
+   },
+   {
+    "measure": "messages",
+    "meaning": "Số cuộc trò chuyện khách bắt đầu với shop từ quảng cáo; chỉ số phụ để không giảm chi phí bằng cách cắt hết quy mô.",
+    "formula": "Tổng cột Messaging"
+   },
+   {
+    "measure": "spend",
+    "meaning": "Số tiền đã chi cho quảng cáo.",
+    "formula": "Tổng cột Spent"
+   },
+   {
+    "measure": "msg_per_k",
+    "meaning": "Sức hút tin nhắn: cứ 1.000 lượt hiển thị ra bao nhiêu tin nhắn.",
+    "formula": "Tổng tin nhắn chia tổng lượt hiển thị, nhân 1.000"
+   }
+  ],
+  "out_of_scope": [
+   "Doanh thu, ROAS, chi phí mỗi đơn hàng: cột Conversions và Conversion values trong báo cáo luôn bằng 0",
+   "Phân tích ở mức từng quảng cáo: cột Ad name không phải mã quảng cáo duy nhất và 68 dòng bị mất chữ số",
+   "Số người tiếp cận duy nhất: Reach không cộng được qua nhiều ngày"
+  ],
+  "open_questions": [
+   "Chi tiêu 19-20/10 tăng khoảng 50% so với các ngày trước (sau khi đã bỏ file Copy). Đây có phải tăng ngân sách thật không?"
+  ],
+  "data_notes": [
+   "Bỏ 2 file trùng nội dung (FB_Ads_Report_2026-10-19 - Copy, 2026-10-20 - Copy), 83 dòng; nếu giữ thì 2 ngày cuối bị cộng đôi.",
+   "59 dòng có tin nhắn nhưng chi tiêu và hiển thị bằng 0 (tin nhắn ghi nhận sau khi quảng cáo dừng): vẫn cộng vào tin nhắn.",
+   "Ad set có chữ test chiếm khoảng 21,6% chi tiêu, vẫn tính vào tổng; xem riêng bằng chiều Loại ad set.",
+   "Chi phí mỗi link click tự tính bằng chi tiêu chia link click, khác cột CPC (All) của Facebook."
+  ]
+ },
+ "metrics": {
+  "spend": {
+   "label": "Chi tiêu (đ)",
+   "formula": "Tổng cột spend (Spent, VND) trên bảng fb_ads_clean, mọi dòng trong khoảng ngày và bộ lọc đang chọn",
+   "calc": {
+    "type": "base",
+    "agg": "sum",
+    "column": "spend",
+    "table": "fb_ads_clean",
+    "filters": []
+   }
+  },
+  "messages": {
+   "label": "Số tin nhắn",
+   "formula": "Tổng cột messages (Messaging) trên bảng fb_ads_clean, mọi mục tiêu campaign, trong khoảng ngày và bộ lọc đang chọn",
+   "calc": {
+    "type": "base",
+    "agg": "sum",
+    "column": "messages",
+    "table": "fb_ads_clean",
+    "filters": []
+   }
+  },
+  "impressions": {
+   "label": "Lượt hiển thị",
+   "formula": "Tổng cột impressions (Impressions) trên bảng fb_ads_clean trong khoảng ngày và bộ lọc đang chọn",
+   "calc": {
+    "type": "base",
+    "agg": "sum",
+    "column": "impressions",
+    "table": "fb_ads_clean",
+    "filters": []
+   }
+  },
+  "link_clicks": {
+   "label": "Lượt bấm link",
+   "formula": "Tổng cột link_clicks (Link clicks) trên bảng fb_ads_clean trong khoảng ngày và bộ lọc đang chọn",
+   "calc": {
+    "type": "base",
+    "agg": "sum",
+    "column": "link_clicks",
+    "table": "fb_ads_clean",
+    "filters": []
+   }
+  },
+  "impr_k": {
+   "label": "Nghìn lượt hiển thị",
+   "formula": "Lượt hiển thị nhân 0,001 (số nghìn lượt hiển thị), dùng làm mẫu số của CPM và tin nhắn trên 1.000 lượt hiển thị",
+   "calc": {
+    "type": "lincomb",
+    "terms": [
+     [
+      "impressions",
+      0.001
+     ]
+    ]
+   }
+  },
+  "cost_per_msg": {
+   "label": "Chi phí mỗi tin nhắn (đ)",
+   "formula": "Chi tiêu chia Số tin nhắn, tổng chia tổng sau khi lọc; dưới 5 tin nhắn hiện mẫu nhỏ",
+   "calc": {
+    "type": "ratio",
+    "num": "spend",
+    "den": "messages"
+   }
+  },
+  "cpm": {
+   "label": "CPM (đ)",
+   "formula": "Chi tiêu chia Nghìn lượt hiển thị (tức chi tiêu chia lượt hiển thị nhân 1.000), tổng chia tổng sau khi lọc; dưới 1.000 lượt hiển thị hiện mẫu nhỏ",
+   "calc": {
+    "type": "ratio",
+    "num": "spend",
+    "den": "impr_k"
+   }
+  },
+  "msg_per_k": {
+   "label": "Tin nhắn trên 1.000 lượt hiển thị",
+   "formula": "Số tin nhắn chia Nghìn lượt hiển thị, tổng chia tổng sau khi lọc; dưới 1.000 lượt hiển thị hiện mẫu nhỏ",
+   "calc": {
+    "type": "ratio",
+    "num": "messages",
+    "den": "impr_k"
+   }
+  },
+  "ctr": {
+   "label": "CTR link",
+   "formula": "Link click chia Lượt hiển thị, tổng chia tổng sau khi lọc; dưới 1.000 lượt hiển thị hiện mẫu nhỏ",
+   "calc": {
+    "type": "ratio",
+    "num": "link_clicks",
+    "den": "impressions"
+   }
+  },
+  "msg_per_click": {
+   "label": "Tin nhắn trên mỗi lượt bấm link",
+   "formula": "Số tin nhắn chia Link click, tổng chia tổng sau khi lọc, dạng phần trăm; dưới 10 link click hiện mẫu nhỏ",
+   "calc": {
+    "type": "ratio",
+    "num": "messages",
+    "den": "link_clicks"
+   }
+  },
+  "cpc_link": {
+   "label": "Chi phí mỗi lượt bấm link (đ)",
+   "formula": "Chi tiêu chia Link click, tổng chia tổng sau khi lọc; dưới 10 link click hiện mẫu nhỏ",
+   "calc": {
+    "type": "ratio",
+    "num": "spend",
+    "den": "link_clicks"
+   }
+  },
+  "spend_zero_adset": {
+   "label": "Chi ở ad set 0 tin nhắn (đ)",
+   "formula": "Gộp các dòng trong phạm vi đang lọc theo ad set; cộng Chi tiêu của những ad set có tổng Số tin nhắn bằng 0",
+   "calc": {
+    "type": "group_zero",
+    "base": "spend",
+    "zero": "messages",
+    "dim": "adset"
+   }
+  },
+  "adset_act_n": {
+   "label": "Số ad set cần xử lý",
+   "formula": "Gộp theo ad set trong phạm vi đang lọc, phân loại mỗi ad set có chi tiêu (Tắt: 0 tin nhắn; Theo dõi thêm: 1-4 tin nhắn; còn lại theo chi so với chi trung bình mỗi ad set và chi phí mỗi tin nhắn so với mức chung); đếm ad set thuộc nhóm Tắt hoặc Cắt giảm (tiêu nhiều và đắt)",
+   "calc": {
+    "type": "group_class",
+    "dim": "adset",
+    "spend": "spend",
+    "msgs": "messages",
+    "min_msgs": 5,
+    "classes": [
+     "zero",
+     "red"
+    ],
+    "agg": "count"
+   }
+  },
+  "adset_red_spend": {
+   "label": "Chi ở nhóm Cắt giảm (đ)",
+   "formula": "Phân loại ad set như Số ad set cần xử lý; cộng Chi tiêu của các ad set thuộc nhóm Cắt giảm (chi từ mức chi trung bình mỗi ad set trở lên, có từ 5 tin nhắn, chi phí mỗi tin nhắn cao hơn mức chung)",
+   "calc": {
+    "type": "group_class",
+    "dim": "adset",
+    "spend": "spend",
+    "msgs": "messages",
+    "min_msgs": 5,
+    "classes": [
+     "red"
+    ],
+    "agg": "sum"
+   }
+  }
+ },
+ "pages": [
+  {
+   "id": "summary",
+   "nav": "Tổng quan",
+   "question": "Mỗi tin nhắn đang tốn bao nhiêu, rẻ hay đắt hơn mức trung bình, khách rơi rụng ở bước nào, và dòng sản phẩm nào đang đắt?",
+   "title": "{range}: mỗi tin nhắn tốn {m.cost_per_msg} đ, {m.messages} tin nhắn từ {m.spend} đ chi tiêu",
+   "title_fallback": [
+    "Phạm vi đang lọc có {m.messages} tin nhắn từ {m.spend} đ chi tiêu, quá ít tin nhắn để đọc chi phí mỗi tin nhắn"
+   ],
+   "layout": [
+    [
+     "k_spend",
+     "k_msg",
+     "k_cost",
+     "k_ctr"
+    ],
+    [
+     "funnel",
+     "trend"
+    ],
+    [
+     "by_product"
+    ]
+   ],
+   "zones": [
+    {
+     "id": "k_spend",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "spend",
+     "label": "Tổng chi (đ)",
+     "compare": {
+      "measure": "spend",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "sub": "Gồm cả ad set thử nghiệm",
+     "layer": "noteworthy",
+     "short_name": "Tổng chi",
+     "meaning": "Đặt cạnh chỉ số chính để biết chi phí mỗi tin nhắn đổi trong bối cảnh ngân sách tăng hay giảm."
+    },
+    {
+     "id": "k_msg",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "messages",
+     "label": "Tổng tin nhắn",
+     "compare": {
+      "measure": "messages",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "sub": "Cuộc trò chuyện bắt đầu từ quảng cáo",
+     "layer": "noteworthy",
+     "short_name": "Tổng tin nhắn",
+     "meaning": "Kiểm tra quy mô kết quả có giữ được khi tối ưu chi phí hay không."
+    },
+    {
+     "id": "k_cost",
+     "type": "kpi",
+     "hero": true,
+     "cube": "ads",
+     "measure": "cost_per_msg",
+     "label": "Chi phí mỗi tin nhắn (đ)",
+     "compare": {
+      "measure": "cost_per_msg",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "spark": {
+      "cube": "ads",
+      "dim": "date",
+      "measure": "cost_per_msg"
+     },
+     "bullet": {
+      "better": "Rẻ hơn",
+      "worse": "Đắt hơn",
+      "same": "Ngang",
+      "ref_label": "mức trung bình toàn bộ dữ liệu",
+      "unit": " đ",
+      "flat": 1
+     },
+     "layer": "noteworthy",
+     "short_name": "Chi phí mỗi tin nhắn",
+     "meaning": "Trả lời ngay hai câu: mỗi tin nhắn tốn bao nhiêu, và đang rẻ hay đắt hơn mức trung bình của toàn bộ dữ liệu (thanh so sánh trong thẻ: xanh là rẻ hơn, đỏ là đắt hơn).",
+     "bullet_label": "mức trung bình từ {start}"
+    },
+    {
+     "id": "k_ctr",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "ctr",
+     "label": "CTR link",
+     "compare": {
+      "measure": "ctr",
+      "period": "prev",
+      "mode": "pp",
+      "label": "so với kỳ trước",
+      "flat": 0.05
+     },
+     "sub": "{m.link_clicks} lượt bấm link trên {m.impressions} lượt hiển thị",
+     "layer": "noteworthy",
+     "short_name": "CTR link",
+     "meaning": "Tín hiệu sớm về độ hấp dẫn của quảng cáo, bước đầu của phễu."
+    },
+    {
+     "id": "funnel",
+     "type": "funnel",
+     "cube": "ads",
+     "steps": [
+      {
+       "measure": "impressions",
+       "label": "Hiển thị"
+      },
+      {
+       "measure": "link_clicks",
+       "label": "Bấm link"
+      },
+      {
+       "measure": "messages",
+       "label": "Tin nhắn"
+      }
+     ],
+     "rates": [
+      {
+       "measure": "ctr",
+       "label": "Thu hút: CTR link"
+      },
+      {
+       "measure": "msg_per_click",
+       "label": "Thuyết phục: tin nhắn trên mỗi lượt bấm link"
+      }
+     ],
+     "title": "So với kỳ trước, khách rơi rụng nhiều hơn ở bước {worst_step} ({worst_change})",
+     "title_fallback": [
+      "Phễu {range}: {m.impressions} lượt hiển thị, {m.link_clicks} lượt bấm link, {m.messages} tin nhắn"
+     ],
+     "subtitle": "Số ở mỗi bước và tỷ lệ chuyển giữa hai bước, so với kỳ trước cùng số ngày.",
+     "footnote": "Độ rộng khối là hình phễu minh hoạ, không theo tỷ lệ số. Tin nhắn có thể đến từ nút nhắn tin mà không qua bấm link, nên tỷ lệ bước thuyết phục là tỷ lệ tương đối giữa hai bước.",
+     "layer": "important",
+     "short_name": "Phễu hiển thị, bấm link, tin nhắn",
+     "meaning": "Khi chi phí mỗi tin nhắn xấu đi, biết ngay lỗi nằm ở bước thu hút (CTR) hay bước thuyết phục nhắn tin, để sửa đúng chỗ: đối tượng và hình ảnh, hay nội dung và lời kêu gọi."
+    },
+    {
+     "id": "trend",
+     "type": "combo",
+     "cube": "ads",
+     "x": "date",
+     "bars": [
+      "messages"
+     ],
+     "line": "cost_per_msg",
+     "token_measure": "cost_per_msg",
+     "lineStyle": "main",
+     "date_mode": "context",
+     "barColors": [
+      "primary2"
+     ],
+     "title": "Ngày {last_label}: {last_value} đ mỗi tin nhắn, ngày {prev_label}: {prev_value} đ, mức trung bình {ref_value} đ",
+     "title_fallback": [
+      "Phạm vi đang lọc có quá ít tin nhắn mỗi ngày để vẽ chi phí mỗi tin nhắn, xem cột số tin nhắn"
+     ],
+     "subtitle": "Số tin nhắn (cột, trục trái) và chi phí mỗi tin nhắn (đường, trục phải) theo ngày. Vạch đứt là mức trung bình từ đầu dữ liệu của phạm vi đang lọc; nền ngọc bích là khoảng ngày đang chọn.",
+     "leftTitle": "Số tin nhắn",
+     "rightTitle": "Chi phí mỗi tin nhắn (đ)",
+     "layer": "important",
+     "short_name": "Tin nhắn và chi phí mỗi tin nhắn theo ngày",
+     "meaning": "Trả lời hôm nay tốt hơn hay xấu hơn hôm qua, tuần trước, và so với mức trung bình.",
+     "refAll": {
+      "label": "Trung bình toàn bộ"
+     },
+     "ref_label": "Trung bình từ {start}"
+    },
+    {
+     "id": "by_product",
+     "type": "hbar",
+     "cube": "ads",
+     "groupBy": "product",
+     "measure": "cost_per_msg",
+     "label_measure": "messages",
+     "refLine": true,
+     "refLabel": "Chung",
+     "highlight": {
+      "type": "threshold",
+      "gte_multiple": 1.3,
+      "min": {
+       "measure": "messages",
+       "gte": 10
+      },
+      "measures": [
+       "cost_per_msg"
+      ]
+     },
+     "title": "Dòng {top_all} có chi phí mỗi tin nhắn cao nhất {top_value} đ, gấp {top_multiple} mức chung",
+     "title_fallback": [
+      "Chưa dòng sản phẩm nào có đủ 5 tin nhắn để so chi phí trong phạm vi đang lọc"
+     ],
+     "title_selected": "Dòng {selected}: {selected_value} đ mỗi tin nhắn, xếp {selected_rank}/{n_valid} dòng sản phẩm từ đắt tới rẻ",
+     "subtitle": "Chi phí mỗi tin nhắn theo dòng sản phẩm. Bấm vào thanh để lọc toàn báo cáo.",
+     "footnote": "Số trong ngoặc là số tin nhắn. Tím than đậm: chi phí từ 1,3 lần mức chung và có ít nhất 10 tin nhắn; dòng đắt nhưng dưới 10 tin nhắn giữ màu nhạt vì mẫu còn nhỏ. Dưới 5 tin nhắn hiện mẫu nhỏ.",
+     "layer": "important",
+     "short_name": "Chi phí mỗi tin nhắn theo dòng sản phẩm",
+     "meaning": "Khoanh vùng dòng sản phẩm đang đắt để giảm ngân sách, và dòng rẻ để dồn thêm."
+    }
+   ]
+  },
+  {
+   "id": "allocation",
+   "nav": "Phân bổ ngân sách",
+   "question": "Tiền đang đổ vào đâu, phần nào không ra tin nhắn, và nhóm, campaign nào nên dồn hay cắt ngân sách?",
+   "title": "{range}: {m.spend} đ chi tiêu mang về {m.messages} tin nhắn, bình quân {m.cost_per_msg} đ mỗi tin nhắn",
+   "title_fallback": [
+    "Phạm vi đang lọc có {m.spend} đ chi tiêu và {m.messages} tin nhắn, quá ít để đọc chi phí mỗi tin nhắn"
+   ],
+   "layout": [
+    [
+     "k2_spend",
+     "k2_msg",
+     "k2_cost",
+     "k2_zero"
+    ],
+    [
+     "share"
+    ],
+    [
+     "scatter"
+    ],
+    [
+     "camp_table"
+    ]
+   ],
+   "zones": [
+    {
+     "id": "k2_spend",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "spend",
+     "label": "Tổng chi (đ)",
+     "compare": {
+      "measure": "spend",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "layer": "noteworthy",
+     "short_name": "Chi tiêu",
+     "meaning": "Quy mô ngân sách của phạm vi đang xem."
+    },
+    {
+     "id": "k2_msg",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "messages",
+     "label": "Tổng tin nhắn",
+     "compare": {
+      "measure": "messages",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "layer": "noteworthy",
+     "short_name": "Số tin nhắn",
+     "meaning": "Kết quả mà ngân sách đó mang về."
+    },
+    {
+     "id": "k2_cost",
+     "type": "kpi",
+     "hero": true,
+     "cube": "ads",
+     "measure": "cost_per_msg",
+     "label": "Chi phí mỗi tin nhắn (đ)",
+     "compare": {
+      "measure": "cost_per_msg",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "layer": "noteworthy",
+     "short_name": "Chi phí mỗi tin nhắn",
+     "meaning": "Mức chung để so từng nhóm ở biểu đồ bên dưới."
+    },
+    {
+     "id": "k2_zero",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "spend_zero_adset",
+     "label": "Chi mà 0 tin nhắn (đ)",
+     "compare": {
+      "measure": "spend_zero_adset",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "sub": "Ad set tiêu tiền mà cả khoảng ngày đang xem chưa ra tin nhắn nào",
+     "layer": "noteworthy",
+     "short_name": "Chi mà 0 tin nhắn",
+     "meaning": "Cho biết bao nhiêu tiền có thể cắt ngay vì chưa mang về tin nhắn nào; danh sách ad set nằm ở trang Ad set cần xử lý."
+    },
+    {
+     "id": "share",
+     "type": "share_bar",
+     "cube": "ads",
+     "measures": [
+      "spend",
+      "messages"
+     ],
+     "series_labels": [
+      "% ngân sách",
+      "% tin nhắn"
+     ],
+     "field_parameter": {
+      "dimensions": [
+       "product",
+       "unit",
+       "objective"
+      ]
+     },
+     "title": "{gap_top} chiếm {gap_a} ngân sách nhưng chỉ mang về {gap_b} tin nhắn",
+     "title_fallback": [
+      "{eff_top} hiệu quả nhất: {eff_a} ngân sách mang về {eff_b} tin nhắn",
+      "Ngân sách và tin nhắn chia gần như đều giữa các nhóm trong phạm vi đang lọc"
+     ],
+     "subtitle": "Thanh tím là phần ngân sách, thanh ngọc bích là phần tin nhắn của từng nhóm. Tím dài hơn ngọc bích: nhóm tiêu nhiều hơn phần tin nhắn mang về. Đổi chiều ở góc phải; Mục tiêu so Tin nhắn với Tương tác.",
+     "layer": "important",
+     "short_name": "% ngân sách so với % tin nhắn",
+     "meaning": "Thấy ngay nhóm nào đang ngốn ngân sách nhiều hơn phần tin nhắn mang về (nên giảm) và nhóm nào mang về nhiều tin nhắn hơn phần tiền (nên dồn thêm), theo dòng sản phẩm, đơn vị hoặc mục tiêu campaign."
+    },
+    {
+     "id": "scatter",
+     "type": "scatter",
+     "cube": "ads",
+     "groupBy": "campaign",
+     "x_measure": "spend",
+     "y_measure": "cost_per_msg",
+     "refLabel": "Chung",
+     "label_top": 7,
+     "title": "{hot} tiêu nhiều nhất trong nhóm đắt hơn mức chung: {hot_x} đ, {hot_y} đ mỗi tin nhắn",
+     "title_fallback": [
+      "Mọi campaign đều rẻ hơn hoặc ngang mức chung {ref_value} đ; {best} tiêu nhiều nhất với {best_y} đ mỗi tin nhắn",
+      "Chưa campaign nào đủ 5 tin nhắn để vẽ trong phạm vi đang lọc"
+     ],
+     "subtitle": "Mỗi chấm là một campaign. Bên phải phía trên (tiêu nhiều, đắt): ứng viên cắt. Bên phải phía dưới (tiêu nhiều, rẻ): giữ hoặc dồn thêm.",
+     "footnote": "Đỏ: đắt hơn mức chung (cùng màu với nhóm Cắt giảm ở trang Ad set); ngọc bích: rẻ hơn hoặc bằng. {n_small} campaign dưới 5 tin nhắn không vẽ.",
+     "xTitle": "Chi tiêu (đ)",
+     "yTitle": "Chi phí mỗi tin nhắn (đ)",
+     "layer": "important",
+     "short_name": "Campaign: tiền chi và chi phí mỗi tin nhắn",
+     "meaning": "Khoanh vùng campaign vừa tiêu nhiều vừa đắt để cắt trước, và campaign tiêu nhiều mà rẻ để giữ hoặc dồn thêm."
+    },
+    {
+     "id": "camp_table",
+     "type": "table",
+     "cube": "ads",
+     "groupBy": "campaign",
+     "columns": [
+      "cost_per_msg",
+      "cost_per_msg@prev",
+      "spend",
+      "messages",
+      "msg_per_k",
+      "cpm"
+     ],
+     "sortBy": "cost_per_msg",
+     "barColumn": "spend",
+     "total": true,
+     "highlight": {
+      "type": "threshold",
+      "gte_multiple": 1.3,
+      "min": {
+       "measure": "messages",
+       "gte": 10
+      },
+      "measures": [
+       "cost_per_msg"
+      ]
+     },
+     "title": "Xếp hạng campaign theo chi phí mỗi tin nhắn, rẻ nhất trước",
+     "subtitle": "Campaign dưới 5 tin nhắn (mẫu nhỏ) xếp cuối. Cột kỳ trước là chi phí mỗi tin nhắn của khoảng ngày liền trước cùng số ngày.",
+     "layer": "tertiary",
+     "short_name": "Bảng xếp hạng campaign",
+     "meaning": "Danh sách theo thứ tự ưu tiên dồn ngân sách: đầu bảng rẻ nhất, cuối bảng đắt nhất hoặc chưa đủ tin nhắn.",
+     "sort": "asc",
+     "col_labels": {
+      "cost_per_msg": "Chi phí/tin nhắn (đ)",
+      "cost_per_msg@prev": "Kỳ trước (đ)",
+      "spend": "Chi tiêu (đ)",
+      "messages": "Tin nhắn",
+      "msg_per_k": "Tin nhắn/1.000 hiển thị",
+      "cpm": "CPM (đ)"
+     },
+     "footnote": "Viền trái tím than: chi phí mỗi tin nhắn từ 1,3 lần mức chung và có ít nhất 10 tin nhắn. Campaign 0 tin nhắn ghi chưa có tin nhắn, dưới 5 tin nhắn ghi mẫu nhỏ."
+    }
+   ]
+  },
+  {
+   "id": "adset",
+   "nav": "Ad set cần xử lý",
+   "question": "Ad set nào cần tắt, cắt giảm, sửa nội dung hay dồn thêm ngân sách, và ad set đó hỏng ở bước nào của phễu?",
+   "title": "{range}: {m.spend} đ chi tiêu trải trên các ad set, bình quân {m.cost_per_msg} đ mỗi tin nhắn",
+   "title_fallback": [
+    "Phạm vi đang lọc có {m.spend} đ chi tiêu và {m.messages} tin nhắn, quá ít để so ad set"
+   ],
+   "layout": [
+    [
+     "k3_n",
+     "k3_red",
+     "k3_zero"
+    ],
+    [
+     "matrix"
+    ],
+    [
+     "zero_bar",
+     "diag"
+    ],
+    [
+     "action_table"
+    ]
+   ],
+   "zones": [
+    {
+     "id": "k3_n",
+     "type": "kpi",
+     "hero": true,
+     "cube": "ads",
+     "measure": "adset_act_n",
+     "label": "Số ad set cần xử lý",
+     "compare": {
+      "measure": "adset_act_n",
+      "period": "prev",
+      "mode": "abs",
+      "label": "so với kỳ trước",
+      "flat": 1
+     },
+     "sub": "Nhóm Tắt (0 tin nhắn) cộng nhóm Cắt giảm (tiêu nhiều, đắt)",
+     "layer": "noteworthy",
+     "short_name": "Số ad set cần xử lý",
+     "meaning": "Cho biết hôm nay có bao nhiêu ad set phải động tay ngay."
+    },
+    {
+     "id": "k3_red",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "adset_red_spend",
+     "label": "Tiền chi ở nhóm Cắt giảm (đ)",
+     "compare": {
+      "measure": "adset_red_spend",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "sub": "Ad set tiêu từ mức trung bình trở lên và đắt hơn mức chung",
+     "layer": "noteworthy",
+     "short_name": "Tiền chi ở nhóm Cắt giảm",
+     "meaning": "Phần ngân sách nên giảm trước vì vừa lớn vừa kém hiệu quả."
+    },
+    {
+     "id": "k3_zero",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "spend_zero_adset",
+     "label": "Tiền chi ở ad set 0 tin nhắn (đ)",
+     "compare": {
+      "measure": "spend_zero_adset",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "sub": "Ad set tiêu tiền mà cả khoảng ngày chưa ra tin nhắn nào",
+     "layer": "noteworthy",
+     "short_name": "Tiền chi ở ad set 0 tin nhắn",
+     "meaning": "Phần ngân sách có thể tắt ngay."
+    },
+    {
+     "id": "matrix",
+     "type": "matrix",
+     "cube": "ads",
+     "groupBy": "adset",
+     "x_measure": "spend",
+     "y_measure": "cost_per_msg",
+     "classify": {
+      "spend": "spend",
+      "msgs": "messages",
+      "min_msgs": 5
+     },
+     "link_to": "diag",
+     "label_top": 6,
+     "title": "{n_red} ad set vừa tiêu nhiều vừa đắt, tổng {red_spend} đ; nặng nhất {hot}: {hot_x} đ, {hot_y} đ mỗi tin nhắn",
+     "title_fallback": [
+      "Không ad set nào vừa tiêu nhiều vừa đắt hơn mức chung {ref_value} đ trong phạm vi đang lọc",
+      "Chưa ad set nào đủ 5 tin nhắn để xếp vào ma trận"
+     ],
+     "subtitle": "Mỗi chấm là một ad set có từ 5 tin nhắn. Vạch dọc: chi trung bình mỗi ad set ({x_ref} đ); vạch ngang: mức chung. Bấm một chấm để xem phễu của ad set đó.",
+     "footnote": "Đỏ: Cắt giảm; cam: Sửa nội dung (tiêu ít, đắt); tím nhạt: Giữ (tiêu nhiều, rẻ); ngọc bích: Dồn thêm (tiêu ít, rẻ). Nhãn là tên ad set, rê chuột để xem campaign. {n_zero} ad set 0 tin nhắn và {n_thin} ad set 1-4 tin nhắn không vẽ ở đây.",
+     "xTitle": "Chi tiêu (đ)",
+     "yTitle": "Chi phí mỗi tin nhắn (đ)",
+     "layer": "important",
+     "short_name": "Ma trận ad set: tiền chi và chi phí mỗi tin nhắn",
+     "meaning": "Xếp mỗi ad set vào một trong 4 việc: cắt giảm, sửa nội dung, giữ, dồn thêm.",
+     "short_labels": true
+    },
+    {
+     "id": "zero_bar",
+     "type": "hbar",
+     "cube": "ads",
+     "groupBy": "adset",
+     "measure": "spend",
+     "where": {
+      "measure": "messages",
+      "eq": 0
+     },
+     "topN": 12,
+     "title": "{top} tiêu {top_value} đ mà chưa ra tin nhắn nào",
+     "title_fallback": [
+      "Không có ad set nào tiêu tiền mà 0 tin nhắn trong phạm vi đang lọc"
+     ],
+     "subtitle": "Ad set có chi tiêu nhưng 0 tin nhắn trong khoảng ngày đang chọn, tối đa 12 ad set nhiều tiền nhất; danh sách đủ ở bảng hành động (nhóm Tắt). Đây là danh sách nên tắt.",
+     "layer": "important",
+     "short_name": "Tiền chi của ad set 0 tin nhắn",
+     "meaning": "Danh sách ad set nên tắt ngay, theo số tiền đã mất."
+    },
+    {
+     "id": "diag",
+     "type": "funnel",
+     "cube": "ads",
+     "pick": {
+      "dim": "adset",
+      "spend": "spend",
+      "msgs": "messages",
+      "min_msgs": 5
+     },
+     "steps": [
+      {
+       "measure": "impressions",
+       "label": "Hiển thị"
+      },
+      {
+       "measure": "link_clicks",
+       "label": "Bấm link"
+      },
+      {
+       "measure": "messages",
+       "label": "Tin nhắn"
+      }
+     ],
+     "rates": [
+      {
+       "measure": "ctr",
+       "label": "Thu hút: CTR link"
+      },
+      {
+       "measure": "msg_per_click",
+       "label": "Thuyết phục: tin nhắn trên mỗi lượt bấm link"
+      }
+     ],
+     "title": [
+      "{pick_action}: {pick}. So với kỳ trước, bước {worst_step} giảm mạnh nhất ({worst_change})"
+     ],
+     "title_fallback": [
+      "{pick_action}: {pick}. {m.impressions} lượt hiển thị, {m.link_clicks} lượt bấm link, {m.messages} tin nhắn",
+      "Không có ad set nào có chi tiêu trong phạm vi đang lọc"
+     ],
+     "subtitle": "Chọn ad set ở góc phải hoặc bấm một chấm trên ma trận. Mặc định là ad set ưu tiên xử lý nhất có từ 5 tin nhắn.",
+     "footnote": "Độ rộng khối là hình phễu minh hoạ, không theo tỷ lệ số. Ad set ít dữ liệu hiện mẫu nhỏ ở các tỷ lệ.",
+     "layer": "important",
+     "short_name": "Phễu chẩn đoán của ad set được chọn",
+     "meaning": "Biết ad set đang chọn hỏng ở bước thu hút (đổi hình ảnh, đối tượng) hay bước thuyết phục (đổi nội dung, lời kêu gọi)."
+    },
+    {
+     "id": "action_table",
+     "type": "table",
+     "cube": "ads",
+     "groupBy": "adset",
+     "classify": {
+      "spend": "spend",
+      "msgs": "messages",
+      "min_msgs": 5
+     },
+     "columns": [
+      "spend",
+      "messages",
+      "cost_per_msg",
+      "cost_per_msg@prev",
+      "ctr",
+      "msg_per_click"
+     ],
+     "barColumn": "spend",
+     "total": true,
+     "title": "Bảng hành động: mọi ad set có chi tiêu, sắp theo mức ưu tiên xử lý",
+     "subtitle": "Thứ tự: Tắt, Cắt giảm, Dồn thêm, Sửa nội dung, Theo dõi thêm (1-4 tin nhắn), Giữ; trong mỗi nhóm, ad set tiêu nhiều đứng trước.",
+     "layer": "tertiary",
+     "short_name": "Bảng hành động ad set",
+     "meaning": "Danh sách việc cần làm với từng ad set, theo đúng thứ tự ưu tiên.",
+     "col_labels": {
+      "spend": "Chi tiêu (đ)",
+      "messages": "Tin nhắn",
+      "cost_per_msg": "Chi phí/tin nhắn (đ)",
+      "cost_per_msg@prev": "Kỳ trước (đ)",
+      "ctr": "CTR link",
+      "msg_per_click": "Tin nhắn/lượt bấm link"
+     }
+    }
+   ]
+  },
+  {
+   "id": "funnel",
+   "nav": "Phễu chi phí",
+   "question": "Chi phí mỗi tin nhắn đổi là do giá hiển thị (CPM) hay do quảng cáo kém hút tin nhắn?",
+   "title": "{range}: chi phí mỗi tin nhắn {d.cost_per_msg} so với kỳ trước; trong đó CPM {d.cpm}, sức hút tin nhắn {d.msg_per_k}",
+   "title_fallback": [
+    "{range}: CPM {m.cpm} đ, cứ 1.000 lượt hiển thị ra {m.msg_per_k} tin nhắn, nên mỗi tin nhắn tốn {m.cost_per_msg} đ",
+    "Phạm vi đang lọc có quá ít lượt hiển thị hoặc tin nhắn để tách CPM và sức hút tin nhắn"
+   ],
+   "layout": [
+    [
+     "k_cpm",
+     "k_mpk2",
+     "k_ctr",
+     "k_cpc"
+    ],
+    [
+     "cpm_trend",
+     "mpk_trend"
+    ],
+    [
+     "funnel_explorer"
+    ]
+   ],
+   "zones": [
+    {
+     "id": "k_cpm",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "cpm",
+     "label": "CPM (đ)",
+     "compare": {
+      "measure": "cpm",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "sub": "{m.impressions} lượt hiển thị",
+     "layer": "noteworthy",
+     "short_name": "CPM",
+     "meaning": "Giá mua hiển thị: tăng nghĩa là đấu giá đắt lên hoặc đối tượng hẹp lại."
+    },
+    {
+     "id": "k_mpk2",
+     "type": "kpi",
+     "hero": true,
+     "cube": "ads",
+     "measure": "msg_per_k",
+     "label": "Tin nhắn trên 1.000 lượt hiển thị",
+     "compare": {
+      "measure": "msg_per_k",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "sub": "{m.messages} tin nhắn",
+     "layer": "noteworthy",
+     "short_name": "Sức hút tin nhắn",
+     "meaning": "Đo nội dung và đối tượng có khiến người xem nhắn tin hay không."
+    },
+    {
+     "id": "k_ctr",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "ctr",
+     "label": "CTR link",
+     "compare": {
+      "measure": "ctr",
+      "period": "prev",
+      "mode": "pp",
+      "label": "so với kỳ trước",
+      "flat": 0.05
+     },
+     "sub": "{m.link_clicks} lượt bấm link",
+     "layer": "noteworthy",
+     "short_name": "CTR link",
+     "meaning": "Tín hiệu sớm về độ hấp dẫn của nội dung quảng cáo."
+    },
+    {
+     "id": "k_cpc",
+     "type": "kpi",
+     "cube": "ads",
+     "measure": "cpc_link",
+     "label": "Chi phí mỗi lượt bấm link (đ)",
+     "compare": {
+      "measure": "cpc_link",
+      "period": "prev",
+      "mode": "pct",
+      "label": "so với kỳ trước",
+      "flat": 3
+     },
+     "sub": "Chi tiêu chia số lượt bấm link",
+     "layer": "noteworthy",
+     "short_name": "Chi phí mỗi link click",
+     "meaning": "Giá của một lượt quan tâm, so cùng chiều với chi phí mỗi tin nhắn."
+    },
+    {
+     "id": "cpm_trend",
+     "type": "line",
+     "cube": "ads",
+     "x": "date",
+     "measures": [
+      "cpm"
+     ],
+     "date_mode": "context",
+     "labelLast": true,
+     "title": "CPM cao nhất ngày {max_label} ({max_value} đ), ngày {last_label} ở {last_value} đ",
+     "title_fallback": [
+      "Phạm vi đang lọc có quá ít lượt hiển thị mỗi ngày để vẽ CPM"
+     ],
+     "subtitle": "CPM theo ngày. Nền ngọc bích là khoảng ngày đang chọn.",
+     "layer": "important",
+     "short_name": "CPM theo ngày",
+     "meaning": "Biết chi phí tăng có phải do giá hiển thị tăng không."
+    },
+    {
+     "id": "mpk_trend",
+     "type": "line",
+     "cube": "ads",
+     "x": "date",
+     "measures": [
+      "msg_per_k"
+     ],
+     "date_mode": "context",
+     "labelLast": true,
+     "colors": [
+      "accent2"
+     ],
+     "title": "Sức hút tin nhắn thấp nhất ngày {min_label} ({min_value} tin trên 1.000 lượt hiển thị), ngày {last_label} ở {last_value}",
+     "title_fallback": [
+      "Phạm vi đang lọc có quá ít lượt hiển thị mỗi ngày để vẽ sức hút tin nhắn"
+     ],
+     "subtitle": "Tin nhắn trên 1.000 lượt hiển thị theo ngày. Nền ngọc bích là khoảng ngày đang chọn.",
+     "layer": "important",
+     "short_name": "Sức hút tin nhắn theo ngày",
+     "meaning": "Biết chi phí tăng có phải do quảng cáo kém hút tin nhắn đi không."
+    },
+    {
+     "id": "funnel_explorer",
+     "type": "hbar",
+     "cube": "ads",
+     "field_parameter": {
+      "dimensions": [
+       "campaign",
+       "product",
+       "objective"
+      ],
+      "measures": [
+       "msg_per_k",
+       "cpm",
+       "ctr",
+       "cpc_link"
+      ]
+     },
+     "label_measure": "messages",
+     "refLine": true,
+     "refLabel": "Chung",
+     "title": "{dim} {top_all} có {measure} cao nhất: {top_value}, gấp {top_multiple} mức chung",
+     "title_by_measure": {
+      "msg_per_k": "{dim} {top} hút tin nhắn tốt nhất: {top_value} tin trên 1.000 lượt hiển thị, gấp {top_multiple} mức chung",
+      "cpm": "{dim} {top} có CPM đắt nhất: {top_value} đ, gấp {top_multiple} mức chung",
+      "ctr": "{dim} {top} có CTR link cao nhất: {top_value}, gấp {top_multiple} mức chung",
+      "cpc_link": "{dim} {top} có chi phí mỗi lượt bấm link cao nhất: {top_value} đ, gấp {top_multiple} mức chung"
+     },
+     "title_fallback": [
+      "Chưa nhóm nào đủ lượt hiển thị để so {measure} trong phạm vi đang lọc"
+     ],
+     "title_selected": "{selected}: {measure} {selected_value}, xếp {selected_rank}/{n_valid} theo {dim}",
+     "subtitle": "Đổi chiều và chỉ số ở góc phải. Nhóm CPM cao: xem lại đối tượng; nhóm sức hút thấp: xem lại nội dung.",
+     "footnote": "Số trong ngoặc là số tin nhắn. Dưới 1.000 lượt hiển thị (hoặc dưới 10 lượt bấm link với chi phí mỗi lượt bấm link) hiện mẫu nhỏ.",
+     "layer": "important",
+     "short_name": "Biểu đồ tìm khâu yếu trong phễu",
+     "meaning": "Biết nhóm nào cần đổi đối tượng (CPM cao) và nhóm nào cần đổi nội dung (sức hút thấp)."
+    }
+   ]
+  },
+  {
+   "id": "recommendation",
+   "nav": "Nhận định và đề xuất",
+   "filters_disabled": true,
+   "question": "Từ số liệu, nên dồn, cắt và sửa gì trong ngân sách quảng cáo?",
+   "scope_note": "Các nhận định dựa trên toàn bộ dữ liệu từ 21/09/2026 tới ngày dữ liệu mới nhất. Muốn số ở các trang khác khớp với trang này, chọn Ngày: Toàn bộ dữ liệu.",
+   "title": "Nhận định và đề xuất phân bổ ngân sách quảng cáo",
+   "layout": [
+    [
+     "reco"
+    ]
+   ],
+   "zones": [
+    {
+     "id": "reco",
+     "type": "insights",
+     "cube": "ads",
+     "overview_title": "Nhận xét tổng quan",
+     "overview": [
+      "Trên toàn bộ dữ liệu, shop đã chi {m.spend} và nhận {m.messages} tin nhắn, tức chi phí mỗi tin nhắn bình quân {m.cost_per_msg}đ. Đây là mức chung để xếp một campaign hay ad set vào nhóm rẻ hoặc đắt.",
+      "Điểm rò ngân sách lớn nhất là nhóm ad set Cắt giảm (tiêu nhiều và đắt hơn mức chung), đang giữ {m.adset_red_spend} trong tổng {m.spend}. Tiền chi cho ad set chưa ra tin nhắn nào chỉ là {m.spend_zero_adset}, nên riêng việc tắt các ad set này không kéo được chi phí xuống.",
+      "Hoa cắt cành là dòng sản phẩm tiêu nhiều tiền nhất nhưng tỷ trọng tin nhắn thấp hơn hẳn tỷ trọng ngân sách. Cả ba campaign Hoa cắt cành đều đắt hơn mức chung {m.cost_per_msg}đ, trong đó hai campaign ở Q2 và Q7 thuộc nhóm đắt nhất tài khoản.",
+      "Các campaign chạy mục tiêu Tương tác ra tin nhắn đắt hơn hẳn nhóm chạy mục tiêu Tin nhắn, do vừa mua hiển thị đắt hơn mức CPM chung {m.cpm}đ vừa hút ít tin nhắn hơn mức chung {m.msg_per_k} tin nhắn trên mỗi nghìn lượt hiển thị.",
+      "Trong bảy ngày cuối, chi tiêu tăng nhanh hơn số tin nhắn nên chi phí mỗi tin nhắn vượt lên trên mức bình quân toàn kỳ {m.cost_per_msg}đ. Phần chi tăng thêm dồn chủ yếu vào các ad set Trung thu đã qua mùa và Hoa cắt cành.",
+      "Dữ liệu mới đo tới bước tin nhắn: {m.messages} tin nhắn chưa được gắn với đơn hàng và doanh thu, nên campaign ra tin nhắn rẻ chưa chắc ra đơn rẻ, nhất là với dòng hoa giá trị cao."
+     ],
+     "actions_title": "Hành động đề xuất và insight làm căn cứ",
+     "actions": [
+      {
+       "priority": "now",
+       "action": "Tắt ngay trong hôm nay hai ad set Trung thu đã qua mùa: Pre-Order Bài tổng hợp (campaign 13_Campaigns Trung thu 2022) và Re-order Trung thu (campaign 13_HEAD_Campaign_08.03), cùng toàn bộ ad set chưa ra tin nhắn nào từ 21/09 tới nay.",
+       "goal": "Thu hồi phần ngân sách đang chi cho mùa lễ đã kết thúc và cho ad set không mang về khách.",
+       "metric": "Tiền chi ở ad set 0 tin nhắn của 7 ngày tiếp theo về dưới 100.000đ; hai ad set Trung thu chi bằng 0 từ ngày mai.",
+       "risk": "Ad set mới chạy chưa đủ thời gian học có thể bị tắt sớm; tin nhắn ghi nhận trễ một ngày có thể làm một ad set trông như chưa có tin nhắn.",
+       "first_step": "Mở trang Ad set cần xử lý, chọn Ngày: Toàn bộ dữ liệu, xem nhóm Tắt và hai ad set Trung thu trong bảng hành động, đối chiếu ngày tạo của từng ad set trước khi tắt.",
+       "insight": [
+        "Hai ad set Trung thu vẫn tiêu tiền sau mùa lễ và ra tin nhắn đắt hơn nhiều lần mức chung {m.cost_per_msg}đ.",
+        "Trong bảy ngày cuối, chi cho các campaign này tăng mạnh trong khi số tin nhắn gần như không đổi.",
+        "Các ad set chưa ra tin nhắn nào đã tiêu {m.spend_zero_adset}, là phần thu hồi được ngay mà không mất tin nhắn."
+       ]
+      },
+      {
+       "priority": "now",
+       "action": "Giảm một nửa ngân sách ngày của hai ad set DS Hoa Test ở campaign Hoa cắt cành Q2 và Q7 cùng hai ad set Khách HTM và Daily Happy của BR trong 7 ngày tới, rồi tắt hẳn ad set nào vẫn trên 40.000đ mỗi tin nhắn.",
+       "goal": "Cắt phần ngân sách đắt nhất trong nhóm Cắt giảm để kéo chi phí mỗi tin nhắn chung xuống.",
+       "metric": "Chi phí mỗi tin nhắn chung của 14 ngày tới về dưới 21.000đ; tiền chi ở nhóm Cắt giảm giảm ít nhất 30% so với 14 ngày trước.",
+       "risk": "Số tin nhắn Hoa cắt cành ở Q2 và Q7 giảm theo; nếu dòng này có giá trị đơn cao thì doanh thu có thể giảm dù chi phí mỗi tin nhắn đẹp hơn. BR tự quyết ngân sách của mình nên cần đồng thuận trước khi cắt.",
+       "first_step": "Ở trang Ad set cần xử lý, chọn Ngày: Toàn bộ dữ liệu, gửi danh sách bốn ad set kèm chi phí mỗi tin nhắn từ bảng hành động cho người chạy ads của Q2, Q7 và BR.",
+       "insight": [
+        "Nhóm Cắt giảm đang giữ {m.adset_red_spend} trong tổng {m.spend}, và bốn ad set này đắt nhất nhóm, cao hơn mức chung {m.cost_per_msg}đ nhiều lần.",
+        "Hai campaign Hoa cắt cành ở Q2 và Q7 vừa mua hiển thị đắt hơn mức CPM chung {m.cpm}đ vừa hút ít tin nhắn hơn mức chung {m.msg_per_k}, nên chỉ đổi nội dung không đủ để cứu."
+       ]
+      },
+      {
+       "priority": "now",
+       "action": "Dồn phần ngân sách cắt ra sang các ad set nhóm Giữ của campaign Hỗn hợp Q7, Lan Hồ điệp và Embrace of Tana trong 2 tuần tới, mỗi lần tăng không quá 20% và cách nhau ít nhất 3 ngày.",
+       "goal": "Giữ hoặc tăng tổng số tin nhắn trong khi chi phí mỗi tin nhắn giảm.",
+       "metric": "Tổng tin nhắn mỗi tuần không dưới 620; chi phí mỗi tin nhắn của từng ad set được dồn thêm không vượt 20.000đ.",
+       "risk": "Ad set tăng ngân sách quá nhanh dễ bão hòa tệp khách và đắt lên; dừng tăng ngay khi chi phí của ad set vượt mức chung.",
+       "first_step": "Chọn ad set Rổ Bảo hiểm (Hỗn hợp Q7), Dân văn phòng yêu động vật (Lan Hồ điệp) và Retargeting của Embrace of Tana làm đợt tăng đầu tiên.",
+       "insight": [
+        "Hỗn hợp ở Q7, Lan Hồ điệp và Embrace of Tana ra tin nhắn rẻ hơn mức chung {m.cost_per_msg}đ và chiếm tỷ trọng tin nhắn lớn hơn tỷ trọng ngân sách.",
+        "Lan Hồ điệp vẫn giữ chi phí thấp khi được tăng chi trong bảy ngày cuối, cho thấy campaign này còn sức nhận thêm ngân sách."
+       ]
+      },
+      {
+       "priority": "strategic",
+       "action": "Chạy A/B test trong 2 tuần cho campaign Hoa cắt cành ở HEAD: tách một bản sao chạy mục tiêu Tin nhắn với cùng tệp khách và cùng nội dung, chia đôi ngân sách với bản đang chạy mục tiêu Tương tác.",
+       "goal": "Biết mục tiêu Tin nhắn có kéo được chi phí mỗi tin nhắn của dòng tiêu nhiều tiền nhất xuống hay không trước khi chuyển hẳn.",
+       "metric": "Sau 14 ngày, mỗi bản có ít nhất 50 tin nhắn và bản mục tiêu Tin nhắn rẻ hơn bản Tương tác ít nhất 20% mỗi tin nhắn.",
+       "risk": "Những ngày đầu bản mới còn trong giai đoạn học nên chi phí cao; bài viết mất bớt lượt tương tác công khai vốn giúp tăng độ tin cậy cho trang.",
+       "first_step": "Nhân bản ad set HCC Ghim quận sang một campaign mới mục tiêu Tin nhắn, giữ nguyên tệp và mẫu quảng cáo.",
+       "insight": [
+        "Campaign mục tiêu Tương tác ra tin nhắn đắt hơn hẳn mức chung {m.cost_per_msg}đ, còn nhóm mục tiêu Tin nhắn nói chung rẻ hơn mức này.",
+        "Hoa cắt cành ở HEAD có sức hút tin nhắn gần mức chung {m.msg_per_k} nhưng CPM cao hơn hẳn mức chung {m.cpm}đ, nên vấn đề nằm ở giá mua hiển thị."
+       ]
+      },
+      {
+       "priority": "strategic",
+       "action": "Ghi số đơn chốt và doanh thu theo campaign cho mọi tin nhắn từ quảng cáo trong 4 tuần tới, bằng hai cột Campaign và Trạng thái chốt đơn trong sổ chốt đơn hằng ngày.",
+       "goal": "Đo được chi phí mỗi đơn và doanh thu trên chi phí quảng cáo theo campaign, để quyết định dồn hay cắt dựa trên đơn chứ không chỉ trên tin nhắn.",
+       "metric": "Ít nhất 80% tin nhắn từ quảng cáo được gắn campaign và trạng thái chốt đơn sau 4 tuần.",
+       "risk": "Tốn thêm thời gian của nhân viên trực tin nhắn; ghi thiếu hoặc ghi sai campaign làm số liệu lệch.",
+       "first_step": "Thêm hai cột Campaign và Trạng thái chốt đơn vào sổ chốt đơn và hướng dẫn nhân viên trực tin nhắn trong tuần này.",
+       "insight": [
+        "Toàn kỳ có {m.messages} tin nhắn nhưng dữ liệu chưa cho biết bao nhiêu tin nhắn thành đơn.",
+        "Hoa cắt cành có tỷ lệ tin nhắn trên lượt bấm link cao hơn mức chung {m.msg_per_click}, nên khách của dòng này có thể quan tâm thật dù tin nhắn đắt; cắt mạnh khi chưa biết giá trị đơn là có rủi ro."
+       ]
+      }
+     ],
+     "layer": "insight",
+     "short_name": "Nhận định và đề xuất",
+     "meaning": "Tóm tắt điều số liệu nói và việc cần làm tiếp theo với ngân sách.",
+     "actions_sub": "Sắp theo thứ tự triển khai: tắt và cắt chỗ đắt trước, dồn sang chỗ rẻ sau; hai việc đầu tư chiến lược chạy song song để kiểm chứng."
+    }
+   ]
+  }
+ ]
+}

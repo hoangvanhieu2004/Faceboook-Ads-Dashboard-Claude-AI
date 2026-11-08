@@ -1,0 +1,33 @@
+# Repo public: chặn mọi file có số liệu kinh doanh (chi tiêu, tin nhắn, tên ad set kèm số).
+# Chỉ đưa lên code, cấu hình dashboard và tài liệu.
+
+# Dữ liệu thô, bảng gộp, gói kiểm toán, nhật ký QC (đều chứa số liệu thật)
+00_Raw/
+01_Union/
+kiem_toan/
+kiem_toan.zip
+qc_dashboard/
+
+# Bản deploy chứa dữ liệu đã tổng hợp; giữ cấu hình Vercel
+deploy/*
+!deploy/vercel.json
+.vercel/
+
+# work/: chặn tất cả, chỉ mở code và file định nghĩa
+work/*
+!work/etl_fb_ads_clean.py
+!work/compute_cubes.py
+!work/mobile_shots.py
+!work/01_problem_brief.json
+!work/02_cleaning_rules.json
+!work/02_data_contract.json
+!work/03_dashboard_spec.json
+
+# docs/ chỉ chứa ảnh minh hoạ cho README (số trên ảnh đã công khai trên Vercel), được đưa lên
+
+# Python và hệ điều hành
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+~$*

@@ -1,0 +1,125 @@
+{
+  "intent_raw": "Build dashboard từ dữ liệu FB Ads đã gộp (00_Raw, mỗi ngày thêm một file). Người xem: cả chủ shop lẫn người chạy ads. Quyết định: dồn hoặc cắt ngân sách. Chỉ số chính: chi phí mỗi tin nhắn, chỉ số phụ: số tin nhắn. Xem hằng ngày.",
+  "stakeholder": {
+    "role": "Chủ shop hoa (xem tổng quan) và người chạy quảng cáo Facebook (tối ưu hằng ngày)",
+    "group": "tactical",
+    "behaviour": "xem mỗi sáng sau khi thả file báo cáo của ngày hôm trước, khoảng 5 đến 10 phút",
+    "feeling": "báo cáo mỗi ngày một file rời, không thấy được campaign nào đang đốt tiền mà không ra tin nhắn",
+    "needs_verbs": [
+      "dồn thêm ngân sách cho campaign, ad set ra tin nhắn rẻ",
+      "cắt hoặc tắt ad set tiêu tiền mà không ra tin nhắn",
+      "phát hiện chi phí mỗi tin nhắn tăng bất thường và biết vì sao"
+    ],
+    "jtbd": "Mỗi sáng, khi xem lại quảng cáo hôm qua, tôi muốn biết tiền đang đổ vào đâu và mỗi tin nhắn tốn bao nhiêu, để dồn ngân sách sang chỗ ra tin nhắn rẻ và cắt chỗ đắt."
+  },
+  "problem_type": "optimization",
+  "dashboard_type": "tactical",
+  "north_star": {
+    "metric": "cost_per_msg",
+    "secondary": "messages",
+    "candidates_considered": [
+      "messages",
+      "cost_per_msg",
+      "spend"
+    ],
+    "rationale": "Người dùng chọn: quyết định là phân bổ lại ngân sách, nên hiệu quả mỗi đồng (chi phí mỗi tin nhắn) là chỉ số chính, số tin nhắn là chỉ số phụ để không tối ưu chi phí bằng cách cắt hết quy mô. Conversions luôn bằng 0 nên tin nhắn là kết quả gần khách hàng nhất. Mẫu số tính trên mọi campaign, kể cả mục tiêu Tương tác (người dùng chọn)."
+  },
+  "growth_formulas": [
+    "chi phí mỗi tin nhắn = tổng chi tiêu / tổng tin nhắn",
+    "chi phí mỗi tin nhắn = CPM / số tin nhắn trên 1.000 lượt hiển thị (giá mua hiển thị chia sức hút tin nhắn)",
+    "tổng chi tiêu và tổng tin nhắn = tổng theo campaign, dòng sản phẩm, đơn vị chạy, ad set"
+  ],
+  "points_of_view": [
+    {
+      "id": "allocation",
+      "name": "Phân bổ ngân sách",
+      "question": "Tiền đang đổ vào campaign, dòng sản phẩm, đơn vị nào, và chỗ nào ra tin nhắn rẻ nhất, đắt nhất?",
+      "leading_metrics": [
+        "spend",
+        "messages",
+        "cost_per_msg"
+      ]
+    },
+    {
+      "id": "adset",
+      "name": "Ad set cần xử lý",
+      "question": "Ad set nào tiêu nhiều mà chi phí mỗi tin nhắn cao hoặc chưa ra tin nhắn, cần tắt hoặc giảm?",
+      "leading_metrics": [
+        "spend",
+        "messages",
+        "cost_per_msg",
+        "ctr"
+      ]
+    },
+    {
+      "id": "funnel",
+      "name": "Phễu chi phí",
+      "question": "Chi phí mỗi tin nhắn đổi là do giá hiển thị (CPM) hay do quảng cáo kém hút tin nhắn?",
+      "leading_metrics": [
+        "cpm",
+        "msg_per_k",
+        "ctr",
+        "cpc_link"
+      ]
+    }
+  ],
+  "interaction": {
+    "global_filters": [
+      {
+        "dim": "date",
+        "type": "date_range",
+        "default": "7 ngày trọn gần nhất",
+        "why": "xem hằng ngày, cần so 7 ngày gần nhất với 7 ngày liền trước"
+      },
+      {
+        "dim": "unit",
+        "why": "ngân sách được chia theo đơn vị chạy (HEAD, Q2, Q7, BR), mỗi đơn vị tự quyết phần của mình"
+      },
+      {
+        "dim": "product",
+        "why": "dồn hay cắt ngân sách thường theo dòng sản phẩm hoa"
+      },
+      {
+        "dim": "campaign",
+        "why": "người chạy ads xử lý ad set theo từng campaign; mục tiêu campaign vẫn xem được ở biểu đồ tỷ trọng"
+      }
+    ],
+    "field_parameters": [
+      {
+        "pov": "allocation",
+        "dimensions": [
+          "campaign",
+          "product",
+          "unit",
+          "adset_type"
+        ],
+        "measures": [
+          "cost_per_msg",
+          "spend",
+          "messages",
+          "msg_per_k"
+        ],
+        "why": "cùng câu hỏi tiền đi đâu, ra bao nhiêu tin nhắn được hỏi qua campaign, dòng sản phẩm, đơn vị và loại ad set"
+      },
+      {
+        "pov": "funnel",
+        "dimensions": [
+          "campaign",
+          "product",
+          "objective"
+        ],
+        "measures": [
+          "cpm",
+          "msg_per_k",
+          "ctr",
+          "cpc_link"
+        ],
+        "why": "tìm khâu nào trong phễu làm chi phí tăng, ở nhóm nào"
+      }
+    ],
+    "no_filter_reason": null
+  },
+  "update_frequency": "daily",
+  "time_range": "toàn bộ dữ liệu từ 21/09/2026, mặc định xem 7 ngày trọn gần nhất",
+  "open_questions": []
+}

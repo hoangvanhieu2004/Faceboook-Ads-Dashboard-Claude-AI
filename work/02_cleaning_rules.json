@@ -1,0 +1,161 @@
+{
+  "clean_tables": [
+    {
+      "name": "fb_ads_clean",
+      "file": "fb_ads_clean.csv",
+      "built_by": "etl_fb_ads_clean.py",
+      "grain": "một dòng là một quảng cáo trong một ngày (không có mã quảng cáo duy nhất), đã bỏ file báo cáo trùng",
+      "sources": [
+        "FB_Ads_Report_2026-09-21.xlsx: Data",
+        "FB_Ads_Report_2026-09-22.xlsx: Data",
+        "FB_Ads_Report_2026-09-23.xlsx: Data",
+        "FB_Ads_Report_2026-09-24.xlsx: Data",
+        "FB_Ads_Report_2026-09-25.xlsx: Data",
+        "FB_Ads_Report_2026-09-26.xlsx: Data",
+        "FB_Ads_Report_2026-09-27.xlsx: Data",
+        "FB_Ads_Report_2026-09-28.xlsx: Data",
+        "FB_Ads_Report_2026-09-29.xlsx: Data",
+        "FB_Ads_Report_2026-09-30.xlsx: Data",
+        "FB_Ads_Report_2026-10-01.xlsx: Data",
+        "FB_Ads_Report_2026-10-02.xlsx: Data",
+        "FB_Ads_Report_2026-10-03.xlsx: Data",
+        "FB_Ads_Report_2026-10-04.xlsx: Data",
+        "FB_Ads_Report_2026-10-05.xlsx: Data",
+        "FB_Ads_Report_2026-10-06.xlsx: Data",
+        "FB_Ads_Report_2026-10-07.xlsx: Data",
+        "FB_Ads_Report_2026-10-08.xlsx: Data",
+        "FB_Ads_Report_2026-10-09.xlsx: Data",
+        "FB_Ads_Report_2026-10-10.xlsx: Data",
+        "FB_Ads_Report_2026-10-11.xlsx: Data",
+        "FB_Ads_Report_2026-10-12.xlsx: Data",
+        "FB_Ads_Report_2026-10-13.xlsx: Data",
+        "FB_Ads_Report_2026-10-14.xlsx: Data",
+        "FB_Ads_Report_2026-10-15.xlsx: Data",
+        "FB_Ads_Report_2026-10-16.xlsx: Data",
+        "FB_Ads_Report_2026-10-17.xlsx: Data",
+        "FB_Ads_Report_2026-10-18.xlsx: Data",
+        "FB_Ads_Report_2026-10-19 - Copy.xlsx: Data",
+        "FB_Ads_Report_2026-10-19.xlsx: Data",
+        "FB_Ads_Report_2026-10-20 - Copy.xlsx: Data",
+        "FB_Ads_Report_2026-10-20.xlsx: Data"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "CR-01",
+      "table": "fb_ads_clean",
+      "type": "dedupe",
+      "text": "Ghép mọi file tên dạng FB_Ads_Report_YYYY-MM-DD.xlsx (sheet đầu tiên) trong thư mục dữ liệu thô. File có nội dung giống hệt một file khác thì chỉ lấy một bản, ưu tiên file không có chữ Copy trong tên. Không khử trùng ở mức dòng: các dòng trùng ngày, campaign, ad set và Ad name nhưng số khác nhau là các quảng cáo khác nhau, cộng dồn bình thường.",
+      "why": "Hai file '- Copy' trùng byte với file ngày 19/10 và 20/10; ghép cả hai sẽ cộng đôi 2 ngày cuối.",
+      "from_issue": [
+        "QI-FB-01",
+        "QI-FB-03"
+      ],
+      "rows_affected": 83,
+      "metrics_affected": [
+        "spend",
+        "messages",
+        "impressions",
+        "reach",
+        "link_clicks",
+        "cost_per_msg",
+        "cpm",
+        "ctr",
+        "cpc_link",
+        "msg_per_k"
+      ],
+      "status": "approved",
+      "applied": true
+    },
+    {
+      "id": "CR-02",
+      "table": "fb_ads_clean",
+      "type": "map",
+      "text": "Tên ad set: gộp nhiều khoảng trắng liên tiếp thành một và bỏ khoảng trắng đầu cuối. Nhãn ad set dùng để phân tích là tên ad set đã chuẩn hoá kèm tên campaign trong ngoặc, ví dụ 'Nữ văn phòng (07_HEAD_Hoa cat canh)', vì cùng một tên ad set có thể nằm ở nhiều campaign.",
+      "why": "Có tên ad set chứa khoảng trắng kép; nhiều tên ad set lặp ở các campaign khác nhau.",
+      "from_issue": [
+        "QI-FB-14"
+      ],
+      "rows_affected": 27,
+      "metrics_affected": [],
+      "status": "ai_inferred",
+      "applied": true
+    },
+    {
+      "id": "CR-03",
+      "table": "fb_ads_clean",
+      "type": "derive",
+      "text": "Đơn vị chạy lấy từ tên campaign: tên dạng 'NN_TAG_tên' với TAG là HEAD, Q2 hoặc Q7 thì đơn vị là TAG; tên bắt đầu bằng 'BR_' thì đơn vị là BR; tên bắt đầu bằng '13_' mà không theo mẫu trên (13_Campaigns Trung thu 2022) thì đơn vị là HEAD; còn lại là Khác.",
+      "why": "Không có cột đơn vị; 13/17 campaign theo quy ước NN_TAG_tên, 4 campaign lệch mẫu được người dùng chỉ định cách xếp.",
+      "from_issue": [
+        "QI-FB-09"
+      ],
+      "rows_affected": 129,
+      "metrics_affected": [],
+      "status": "approved",
+      "applied": true
+    },
+    {
+      "id": "CR-04",
+      "table": "fb_ads_clean",
+      "type": "map",
+      "text": "Dòng sản phẩm lấy theo mã số 2 chữ số đầu tên campaign: 01 Embrace of Tana, 03 Dreamy, 04 Breezy, 05 Thiết kế, 07 Hoa cắt cành, 08 Daily Flower, 10 Lan Hồ điệp, 11 Hỗn hợp, 13 Campaign mùa vụ (gồm cả 13_Campaigns Trung thu 2022). Campaign bắt đầu bằng 'BR_' lấy phần thứ hai của tên làm dòng sản phẩm (BR_HTM_... là HTM, BR_Mokar_... là Mokar). Mã số khác lấy phần tên sau TAG; không theo mẫu nào thì là Khác.",
+      "why": "Không có cột dòng sản phẩm; mã số đầu tên campaign là mã dòng sản phẩm, dùng chung giữa HEAD, Q2, Q7.",
+      "from_issue": [
+        "QI-FB-09"
+      ],
+      "rows_affected": 1313,
+      "metrics_affected": [],
+      "status": "ai_inferred",
+      "applied": true
+    },
+    {
+      "id": "CR-05",
+      "table": "fb_ads_clean",
+      "type": "map",
+      "text": "Mục tiêu campaign (Objective) đổi sang tiếng Việt: Messages là Tin nhắn, Engagement là Tương tác, Reach là Tiếp cận. Giữ mọi mục tiêu, không bỏ dòng nào.",
+      "why": "Nhãn hiển thị tiếng Việt; người dùng chọn tính chi phí mỗi tin nhắn trên mọi campaign, kể cả mục tiêu Tương tác.",
+      "from_issue": [
+        "QI-FB-07"
+      ],
+      "rows_affected": 1313,
+      "metrics_affected": [],
+      "status": "approved",
+      "applied": true
+    },
+    {
+      "id": "CR-06",
+      "table": "fb_ads_clean",
+      "type": "derive",
+      "text": "Loại ad set là Thử nghiệm khi tên ad set có chữ 'test' (không phân biệt hoa thường), còn lại là Chính. Ad set thử nghiệm vẫn tính vào mọi tổng.",
+      "why": "Ad set test chiếm 21,6% chi tiêu và là tiền thật; người dùng chọn giữ trong tổng và thêm chiều để so hiệu quả.",
+      "from_issue": [
+        "QI-FB-08"
+      ],
+      "rows_affected": 271,
+      "metrics_affected": [],
+      "status": "approved",
+      "applied": true
+    }
+  ],
+  "columns": {
+    "fb_ads_clean.date": "ngày báo cáo, lấy từ cột Reporting starts, dạng yyyy-mm-dd",
+    "fb_ads_clean.campaign": "tên campaign, lấy nguyên từ cột Campaign name",
+    "fb_ads_clean.adset": "nhãn ad set theo luật CR-02: tên ad set đã chuẩn hoá kèm tên campaign trong ngoặc",
+    "fb_ads_clean.unit": "đơn vị chạy theo luật CR-03",
+    "fb_ads_clean.product": "dòng sản phẩm theo luật CR-04",
+    "fb_ads_clean.objective": "mục tiêu campaign theo luật CR-05",
+    "fb_ads_clean.adset_type": "loại ad set theo luật CR-06",
+    "fb_ads_clean.spend": "cột Spent (VND)",
+    "fb_ads_clean.messages": "cột Messaging (số cuộc trò chuyện bắt đầu từ quảng cáo)",
+    "fb_ads_clean.impressions": "cột Impressions",
+    "fb_ads_clean.reach": "cột Reach",
+    "fb_ads_clean.link_clicks": "cột Link clicks"
+  },
+  "issue_resolutions": {
+    "QI-FB-02": "Ad name bị mất chữ số ở 68 dòng: dashboard không dùng Ad name làm khoá hay chiều phân tích, chỉ phân tích từ mức ad set trở lên, nên không đổi số nào.",
+    "QI-FB-04": "Conversions, Conversion values, Cost per conversion luôn bằng 0: dashboard không dùng ba cột này; kết quả chính là Messaging. Doanh thu và ROAS ghi ở mục Ngoài phạm vi.",
+    "QI-FB-05": "Không dùng cột CPC (All) vì thiếu số click tất cả để tính lại; dashboard tự tính chi phí mỗi link click bằng tổng Spent chia tổng Link clicks và gọi đúng tên đó."
+  }
+}

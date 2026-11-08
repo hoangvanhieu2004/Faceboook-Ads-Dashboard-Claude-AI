@@ -1,0 +1,298 @@
+{
+  "tables": {
+    "fb_ads_clean": {
+      "file": "fb_ads_clean.csv",
+      "grain": "một dòng là một quảng cáo trong một ngày, đã bỏ file báo cáo trùng",
+      "date_column": "date",
+      "derived_from": [
+        "00_Raw/FB_Ads_Report_*.xlsx"
+      ],
+      "built_by": "etl_fb_ads_clean.py"
+    }
+  },
+  "joins": [],
+  "metrics": [
+    {
+      "id": "total_spend",
+      "label": "Tổng chi tiêu",
+      "table": "fb_ads_clean",
+      "agg": "sum",
+      "column": "spend",
+      "filters": [],
+      "computable": true
+    },
+    {
+      "id": "total_messages",
+      "label": "Tổng tin nhắn",
+      "table": "fb_ads_clean",
+      "agg": "sum",
+      "column": "messages",
+      "filters": [],
+      "computable": true
+    },
+    {
+      "id": "total_impressions",
+      "label": "Tổng lượt hiển thị",
+      "table": "fb_ads_clean",
+      "agg": "sum",
+      "column": "impressions",
+      "filters": [],
+      "computable": true
+    },
+    {
+      "id": "total_reach",
+      "label": "Tổng lượt tiếp cận cộng dồn",
+      "table": "fb_ads_clean",
+      "agg": "sum",
+      "column": "reach",
+      "filters": [],
+      "computable": true
+    },
+    {
+      "id": "total_link_clicks",
+      "label": "Tổng link click",
+      "table": "fb_ads_clean",
+      "agg": "sum",
+      "column": "link_clicks",
+      "filters": [],
+      "computable": true
+    },
+    {
+      "id": "cost_per_msg_all",
+      "label": "Chi phí mỗi tin nhắn",
+      "agg": "ratio",
+      "numerator": "total_spend",
+      "denominator": "total_messages",
+      "computable": true
+    },
+    {
+      "id": "ctr_all",
+      "label": "CTR link",
+      "agg": "ratio",
+      "numerator": "total_link_clicks",
+      "denominator": "total_impressions",
+      "computable": true
+    },
+    {
+      "id": "cpc_link_all",
+      "label": "Chi phí mỗi link click",
+      "agg": "ratio",
+      "numerator": "total_spend",
+      "denominator": "total_link_clicks",
+      "computable": true
+    }
+  ],
+  "quality_flags": [
+    "Conversions, Conversion values, Cost per conversion luôn bằng 0: không dùng.",
+    "Ad name không phải mã quảng cáo duy nhất và 68 dòng bị mất chữ số: không dùng làm chiều.",
+    "59 dòng có tin nhắn nhưng chi tiêu và hiển thị bằng 0 (tin nhắn ghi nhận sau khi quảng cáo dừng): giữ, cộng vào tin nhắn.",
+    "Reach cộng qua ngày và quảng cáo là lượt tiếp cận cộng dồn, không phải số người duy nhất."
+  ],
+  "unmapped_metrics": [
+    {
+      "id": "roas",
+      "reason": "Conversion values luôn bằng 0, không có doanh thu",
+      "proxy_suggested": "chi phí mỗi tin nhắn"
+    },
+    {
+      "id": "unique_reach",
+      "reason": "Reach không cộng dồn được qua ngày",
+      "proxy_suggested": "lượt hiển thị"
+    }
+  ],
+  "cubes": {
+    "ads": {
+      "table": "fb_ads_clean",
+      "dims": {
+        "date": "date",
+        "unit": "unit",
+        "product": "product",
+        "objective": "objective",
+        "adset_type": "adset_type",
+        "campaign": "campaign",
+        "adset": "adset"
+      },
+      "measures": {
+        "spend": {
+          "agg": "sum",
+          "column": "spend"
+        },
+        "messages": {
+          "agg": "sum",
+          "column": "messages"
+        },
+        "impressions": {
+          "agg": "sum",
+          "column": "impressions"
+        },
+        "reach": {
+          "agg": "sum",
+          "column": "reach"
+        },
+        "link_clicks": {
+          "agg": "sum",
+          "column": "link_clicks"
+        }
+      }
+    }
+  },
+  "cube_scalar_map": {
+    "ads.spend": "total_spend",
+    "ads.messages": "total_messages",
+    "ads.impressions": "total_impressions",
+    "ads.reach": "total_reach",
+    "ads.link_clicks": "total_link_clicks"
+  },
+  "metric_docs": {
+    "cost_per_msg": {
+      "meaning": "Bình quân mỗi cuộc trò chuyện từ quảng cáo tốn bao nhiêu tiền; thấp là tốt.",
+      "definition_text": "Trên bảng quảng cáo theo ngày đã bỏ file trùng, lấy các dòng trong khoảng ngày và bộ lọc đang chọn, cộng toàn bộ chi tiêu (Spent) rồi chia cho tổng số tin nhắn (Messaging) của chính các dòng đó. Tính trên mọi mục tiêu campaign. Dưới 5 tin nhắn thì không hiển thị (mẫu nhỏ).",
+      "self_check": "Mở các file báo cáo của khoảng ngày cần kiểm trong Excel, dán chung một sheet (bỏ file Copy), dùng SUM cột Spent chia SUM cột Messaging.",
+      "known_limits": [
+        "Tin nhắn có thể ghi nhận vào ngày sau khi quảng cáo đã dừng, nên chi phí theo từng ngày lệch nhẹ",
+        "Không phân biệt tin nhắn có mua hàng hay không"
+      ],
+      "definition_status": "approved"
+    },
+    "messages": {
+      "meaning": "Số cuộc trò chuyện khách bắt đầu với shop từ quảng cáo.",
+      "definition_text": "Tổng cột Messaging trên bảng quảng cáo theo ngày đã bỏ file trùng, trong khoảng ngày và bộ lọc đang chọn, mọi mục tiêu campaign.",
+      "self_check": "SUM cột Messaging của các file trong khoảng ngày cần kiểm (bỏ file Copy).",
+      "known_limits": [
+        "Một khách nhắn nhiều lần có thể được đếm nhiều cuộc"
+      ],
+      "definition_status": "approved"
+    },
+    "spend": {
+      "meaning": "Số tiền đã chi cho quảng cáo.",
+      "definition_text": "Tổng cột Spent (VND) trên bảng quảng cáo theo ngày đã bỏ file trùng, trong khoảng ngày và bộ lọc đang chọn, gồm cả ad set thử nghiệm.",
+      "self_check": "SUM cột Spent của các file trong khoảng ngày cần kiểm (bỏ file Copy).",
+      "known_limits": [],
+      "definition_status": "ai_inferred"
+    },
+    "impressions": {
+      "meaning": "Số lần quảng cáo được hiển thị.",
+      "definition_text": "Tổng cột Impressions trên bảng quảng cáo theo ngày đã bỏ file trùng, trong khoảng ngày và bộ lọc đang chọn.",
+      "self_check": "SUM cột Impressions của các file trong khoảng ngày cần kiểm.",
+      "known_limits": [],
+      "definition_status": "ai_inferred"
+    },
+    "reach": {
+      "meaning": "Lượt tiếp cận cộng dồn theo ngày và quảng cáo, không phải số người duy nhất.",
+      "definition_text": "Tổng cột Reach trên bảng quảng cáo theo ngày đã bỏ file trùng, trong khoảng ngày và bộ lọc đang chọn; cộng thẳng qua các dòng.",
+      "self_check": "SUM cột Reach của các file trong khoảng ngày cần kiểm.",
+      "known_limits": [
+        "Một người thấy quảng cáo ở nhiều ngày được đếm nhiều lần"
+      ],
+      "definition_status": "ai_inferred"
+    },
+    "link_clicks": {
+      "meaning": "Số lần bấm vào liên kết của quảng cáo.",
+      "definition_text": "Tổng cột Link clicks trên bảng quảng cáo theo ngày đã bỏ file trùng, trong khoảng ngày và bộ lọc đang chọn.",
+      "self_check": "SUM cột Link clicks của các file trong khoảng ngày cần kiểm.",
+      "known_limits": [],
+      "definition_status": "ai_inferred"
+    },
+    "impr_k": {
+      "meaning": "Số nghìn lượt hiển thị, dùng làm mẫu số của CPM.",
+      "definition_text": "Tổng cột Impressions chia 1.000, trong khoảng ngày và bộ lọc đang chọn.",
+      "self_check": "SUM cột Impressions rồi chia 1.000.",
+      "known_limits": [],
+      "definition_status": "ai_inferred"
+    },
+    "cpm": {
+      "meaning": "Giá mua 1.000 lượt hiển thị; tăng nghĩa là quảng cáo đắt lên trên chợ đấu giá.",
+      "definition_text": "Tổng Spent chia tổng Impressions rồi nhân 1.000, tổng chia tổng trên các dòng trong khoảng ngày và bộ lọc đang chọn. Dưới 1.000 lượt hiển thị thì không hiển thị.",
+      "self_check": "SUM Spent chia SUM Impressions, nhân 1.000.",
+      "known_limits": [
+        "Khác trung bình cột CPM của file gốc vì đây là tổng chia tổng"
+      ],
+      "definition_status": "ai_inferred"
+    },
+    "msg_per_k": {
+      "meaning": "Sức hút tin nhắn: cứ 1.000 lượt hiển thị thì ra bao nhiêu tin nhắn; cao là tốt.",
+      "definition_text": "Tổng Messaging chia tổng Impressions rồi nhân 1.000, trong khoảng ngày và bộ lọc đang chọn. Dưới 1.000 lượt hiển thị thì không hiển thị.",
+      "self_check": "SUM Messaging chia SUM Impressions, nhân 1.000.",
+      "known_limits": [],
+      "definition_status": "ai_inferred"
+    },
+    "ctr": {
+      "meaning": "Tỷ lệ lượt hiển thị dẫn tới bấm link.",
+      "definition_text": "Tổng Link clicks chia tổng Impressions, trong khoảng ngày và bộ lọc đang chọn. Dưới 1.000 lượt hiển thị thì không hiển thị.",
+      "self_check": "SUM Link clicks chia SUM Impressions.",
+      "known_limits": [
+        "Khác trung bình cột CTR của file gốc vì đây là tổng chia tổng"
+      ],
+      "definition_status": "ai_inferred"
+    },
+    "spend_zero_adset": {
+      "meaning": "Tiền đổ vào các ad set chưa mang về tin nhắn nào trong khoảng ngày đang xem: phần ngân sách có thể cắt ngay.",
+      "definition_text": "Trên bảng quảng cáo theo ngày đã bỏ file trùng, lấy các dòng trong khoảng ngày và bộ lọc đang chọn, gộp theo ad set (tên ad set kèm campaign), giữ các ad set có tổng Messaging bằng 0, rồi cộng tổng Spent của các ad set đó.",
+      "self_check": "Pivot các file trong khoảng ngày theo Campaign name và Ad Set Name, cột SUM Spent và SUM Messaging; lọc dòng SUM Messaging = 0, cộng cột SUM Spent.",
+      "known_limits": [
+        "Đổi khoảng ngày thì danh sách ad set đổi theo: ad set có tin nhắn ở ngày khác ngoài khoảng đang xem vẫn bị tính",
+        "Tin nhắn có thể ghi nhận trễ một ngày sau khi chi"
+      ],
+      "definition_status": "approved"
+    },
+    "msg_per_click": {
+      "meaning": "Bước thuyết phục của phễu: so với số lượt bấm link, quảng cáo ra được bao nhiêu tin nhắn.",
+      "definition_text": "Tổng Messaging chia tổng Link clicks, trong khoảng ngày và bộ lọc đang chọn, hiển thị dạng phần trăm. Dưới 10 link click thì không hiển thị. Tin nhắn có thể đến từ nút nhắn tin mà không qua bấm link, nên tỷ lệ có thể vượt 100% ở nhóm nhỏ.",
+      "self_check": "SUM Messaging chia SUM Link clicks.",
+      "known_limits": [
+        "Tin nhắn không bắt buộc đi qua bấm link, nên đây là tỷ lệ tương đối giữa hai bước, không phải tỷ lệ chuyển đổi thật"
+      ],
+      "definition_status": "ai_inferred"
+    },
+    "cpc_link": {
+      "meaning": "Chi phí cho mỗi lần bấm link.",
+      "definition_text": "Tổng Spent chia tổng Link clicks, trong khoảng ngày và bộ lọc đang chọn. Dưới 10 link click thì không hiển thị. Không dùng cột CPC (All) của file gốc vì mẫu số của cột đó là mọi loại click.",
+      "self_check": "SUM Spent chia SUM Link clicks.",
+      "known_limits": [
+        "Khác cột CPC (All) của Facebook"
+      ],
+      "definition_status": "ai_inferred"
+    },
+    "adset_act_n": {
+      "meaning": "Số ad set nên tắt hoặc cắt ngay: chưa ra tin nhắn nào, hoặc vừa tiêu nhiều vừa đắt hơn mức chung.",
+      "definition_text": "Trên bảng quảng cáo theo ngày đã bỏ file trùng, lấy các dòng trong khoảng ngày và bộ lọc đang chọn, gộp theo ad set (tên ad set kèm campaign), mỗi ad set có tổng Spent và tổng Messaging. Chỉ xét ad set có tổng Spent lớn hơn 0. Chi trung bình = trung bình tổng Spent của các ad set đó. Mức chung = tổng Spent chia tổng Messaging của toàn phạm vi (mọi dòng). Phân loại: Tắt nếu Messaging = 0; Theo dõi thêm nếu Messaging từ 1 tới 4; còn lại, tiêu nhiều nếu Spent >= chi trung bình, đắt nếu Spent/Messaging > mức chung: Cắt giảm (tiêu nhiều, đắt), Giữ (tiêu nhiều, không đắt), Sửa nội dung (tiêu ít, đắt), Dồn thêm (tiêu ít, không đắt). Chỉ số này đếm số ad set thuộc nhóm Tắt hoặc Cắt giảm.",
+      "self_check": "Pivot theo Campaign name và Ad Set Name với SUM Spent, SUM Messaging; tính chi trung bình và mức chung như định nghĩa; đếm dòng Messaging = 0 cộng dòng có Messaging >= 5, Spent >= chi trung bình và Spent/Messaging > mức chung.",
+      "known_limits": [
+        "Ngưỡng chi trung bình và mức chung đổi theo bộ lọc, nên cùng một ad set có thể đổi nhóm khi đổi khoảng ngày"
+      ],
+      "definition_status": "approved"
+    },
+    "adset_red_spend": {
+      "meaning": "Số tiền đang đổ vào các ad set vừa tiêu nhiều vừa đắt: phần ngân sách nên giảm trước.",
+      "definition_text": "Trên bảng quảng cáo theo ngày đã bỏ file trùng, lấy các dòng trong khoảng ngày và bộ lọc đang chọn, gộp theo ad set (tên ad set kèm campaign), mỗi ad set có tổng Spent và tổng Messaging. Chỉ xét ad set có tổng Spent lớn hơn 0. Chi trung bình = trung bình tổng Spent của các ad set đó. Mức chung = tổng Spent chia tổng Messaging của toàn phạm vi (mọi dòng). Phân loại: Tắt nếu Messaging = 0; Theo dõi thêm nếu Messaging từ 1 tới 4; còn lại, tiêu nhiều nếu Spent >= chi trung bình, đắt nếu Spent/Messaging > mức chung: Cắt giảm (tiêu nhiều, đắt), Giữ (tiêu nhiều, không đắt), Sửa nội dung (tiêu ít, đắt), Dồn thêm (tiêu ít, không đắt). Chỉ số này cộng tổng Spent của các ad set thuộc nhóm Cắt giảm.",
+      "self_check": "Trong pivot như trên, cộng SUM Spent của các dòng có Messaging >= 5, Spent >= chi trung bình và Spent/Messaging > mức chung.",
+      "known_limits": [
+        "Ngưỡng đổi theo bộ lọc"
+      ],
+      "definition_status": "approved"
+    }
+  },
+  "dim_docs": {
+    "date": {
+      "definition_text": "Ngày báo cáo, lấy từ cột Reporting starts của từng file, dạng yyyy-mm-dd."
+    },
+    "unit": {
+      "definition_text": "Đơn vị chạy suy từ tên campaign theo luật CR-03: TAG trong tên NN_TAG_tên (HEAD, Q2, Q7); tên bắt đầu BR_ là BR; 13_Campaigns Trung thu 2022 là HEAD."
+    },
+    "product": {
+      "definition_text": "Dòng sản phẩm theo mã 2 chữ số đầu tên campaign (luật CR-04): 01 Embrace of Tana, 03 Dreamy, 04 Breezy, 05 Thiết kế, 07 Hoa cắt cành, 08 Daily Flower, 10 Lan Hồ điệp, 11 Hỗn hợp, 13 Campaign mùa vụ; campaign BR_ lấy phần thứ hai của tên (HTM, Mokar)."
+    },
+    "objective": {
+      "definition_text": "Cột Objective đổi sang tiếng Việt: Messages là Tin nhắn, Engagement là Tương tác, Reach là Tiếp cận."
+    },
+    "adset_type": {
+      "definition_text": "Thử nghiệm khi tên ad set có chữ test (không phân biệt hoa thường), còn lại là Chính."
+    },
+    "campaign": {
+      "definition_text": "Cột Campaign name giữ nguyên."
+    },
+    "adset": {
+      "definition_text": "Tên ad set (cột Ad Set Name) đã gộp khoảng trắng thừa, kèm tên campaign trong ngoặc."
+    }
+  }
+}
